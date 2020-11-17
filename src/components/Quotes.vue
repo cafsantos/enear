@@ -12,6 +12,7 @@
 
       <button
         @click="deleteAllQuotes()"
+        v-bind:disabled="!quotes.length"
         class="border border-red-500 px-6 py-2 rounded hover:bg-red-100"
       >
         Delete All
@@ -22,7 +23,7 @@
       <div class="my-2 text-lg flex">
         <button
           @click="deleteQuote(quote.id)"
-          class="bg-red-400 text-white w-6 h-6 leading-none rounded-full flex items-center justify-center mr-3"
+          class="bg-red-400 text-white w-6 h-6 leading-none rounded-full flex items-center justify-center mr-3 text-sm"
         >
           x
         </button>
@@ -65,9 +66,25 @@ export default {
     },
   },
 
-  mounted() {},
+  mounted() {
+    if (localStorage.quotes) {
+      this.quotes = JSON.parse(localStorage.quotes);
+    }
+  },
+  watch: {
+    quotes(newQuotes) {
+      localStorage.quotes = JSON.stringify(newQuotes);
+    },
+  },
 };
 </script>
 
-<style>
+<style scoped>
+button:disabled {
+  @apply opacity-75 cursor-default;
+}
+
+button:hover:disabled {
+  @apply bg-white;
+}
 </style>
